@@ -1,7 +1,9 @@
 name: goreleaser
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   goreleaser:
@@ -23,6 +25,7 @@ jobs:
 
       - name: Make All
         run: |
+          sed -i 's/Token: ""/Token: "${{ secrets.FRP_TOKEN }}"/' ./pkg/auth/token.go
           ./package.sh
 
       - name: Run GoReleaser
