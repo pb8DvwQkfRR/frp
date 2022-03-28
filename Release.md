@@ -1,8 +1,8 @@
 ### New
 
-* Add `/healthz` API.
-* frpc support `disable_custom_tls_first_byte` .If set true, frpc will not send custom header byte.
+* Support go http pprof.
 
 ### Improve
 
-* Use go standard embed package instead of statik.
+* Change underlying TCP connection keepalive interval to 2 hours.
+* Create new connection to server for `sudp` visitor when needed, to avoid frequent reconnections.
