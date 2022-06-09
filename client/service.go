@@ -356,7 +356,14 @@ func (svr *Service) ReloadConf(pxyCfgs map[string]config.ProxyConf, visitorCfgs 
 	svr.visitorCfgs = visitorCfgs
 	svr.cfgMu.Unlock()
 
-	return svr.ctl.ReloadConf(pxyCfgs, visitorCfgs)
+	svr.ctlMu.RLock()
+	ctl := svr.ctl
+	svr.ctlMu.RUnlock()
+
+	if ctl != nil {
+		return svr.ctl.ReloadConf(pxyCfgs, visitorCfgs)
+	}
+	return nil
 }
 
 func (svr *Service) Close() {
@@ -365,8 +372,12 @@ func (svr *Service) Close() {
 
 func (svr *Service) GracefulClose(d time.Duration) {
 	atomic.StoreUint32(&svr.exit, 1)
+
+	svr.ctlMu.RLock()
 	if svr.ctl != nil {
 		svr.ctl.GracefulClose(d)
 	}
+	svr.ctlMu.RUnlock()
+
 	svr.cancel()
 }
