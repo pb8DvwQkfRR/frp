@@ -1,8 +1,9 @@
 ### New
 
-* Use auto generated certificates if `plugin_key_path` and `plugin_crt_path` are empty for plugin `https2https` and `https2http`.
-* Server dashboard supports TLS configs.
+* Add `oidc_scope` parameter to frpc when `authentication_method = oidc`.
+* Support quic protocol between frpc and frps.
 
-### Fix
 
-* xtcp error with IPv6 address.
+### Improve
+
+* Upgrade oidc and oauth2 package which is forward compatible.
