@@ -109,7 +109,7 @@ func NewControl(
 	ctl.msgTransporter = transport.NewMessageTransporter(ctl.sendCh)
 	ctl.pm = proxy.NewManager(ctl.ctx, clientCfg, ctl.msgTransporter)
 
-	ctl.vm = visitor.NewManager(ctl.ctx, ctl.clientCfg, ctl.connectServer, ctl.msgTransporter)
+	ctl.vm = visitor.NewManager(ctl.ctx, ctl.runID, ctl.clientCfg, ctl.connectServer, ctl.msgTransporter)
 	ctl.vm.Reload(visitorCfgs)
 	return ctl
 }
@@ -124,7 +124,7 @@ func (ctl *Control) Run() {
 	go ctl.vm.Run()
 }
 
-func (ctl *Control) HandleReqWorkConn(inMsg *msg.ReqWorkConn) {
+func (ctl *Control) HandleReqWorkConn(_ *msg.ReqWorkConn) {
 	xl := ctl.xl
 	workConn, err := ctl.connectServer()
 	if err != nil {
